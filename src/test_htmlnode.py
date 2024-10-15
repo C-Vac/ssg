@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html_empty(self):
@@ -41,6 +41,44 @@ class TestLeafNode(unittest.TestCase):
         node = LeafNode(None, tag="p")
         with self.assertRaises(ValueError):
             node.to_html()
+
+class TestParentNode(unittest.TestCase):
+
+    def test_to_html_no_tag(self):
+        node = ParentNode([LeafNode("Hello")])
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_to_html_no_children(self):
+        node = ParentNode([], tag="div")
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_to_html_simple(self):
+        node = ParentNode([LeafNode("Hello")], tag="div")
+        self.assertEqual(node.to_html(), "<div>Hello</div>")
+
+    def test_to_html_with_props(self):
+        node = ParentNode([LeafNode("Hello")], tag="div", props={"class": "container"})
+        self.assertEqual(node.to_html(), "<div class=\"container\">Hello</div>")
+
+    def test_to_html_multiple_children(self):
+        node = ParentNode([LeafNode("Hello"), LeafNode("World")], tag="div")
+        self.assertEqual(node.to_html(), "<div>HelloWorld</div>")
+
+    def test_to_html_nested_parents(self):
+        inner_node = ParentNode([LeafNode("Inner")], tag="span")
+        outer_node = ParentNode([inner_node], tag="div")
+        self.assertEqual(outer_node.to_html(), "<div><span>Inner</span></div>")
+
+    def test_to_html_complex_nesting(self):
+        leaf1 = LeafNode("One")
+        leaf2 = LeafNode("Two")
+        span1 = ParentNode([leaf1], tag="span")
+        span2 = ParentNode([leaf2], tag="span", props={"class": "bold"})
+        div = ParentNode([span1, span2], tag="div", props={"id": "content"})
+        expected_html = "<div id=\"content\"><span>One</span><span class=\"bold\">Two</span></div>"
+        self.assertEqual(div.to_html(), expected_html)
 
 if __name__ == "__main__":
     unittest.main()
