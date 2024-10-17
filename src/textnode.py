@@ -1,4 +1,5 @@
 from enum import Enum
+import re
   
 class TextType(Enum):
     TEXT = 1
@@ -60,7 +61,6 @@ class TextNode():
         new_nodes = []
         for node in old_nodes:
             if node.text_type == TextType.TEXT:
-                print(f"Processing node: {node.text}")
                 parts = []
                 text = ""
                 delimiter_count = 0
@@ -77,10 +77,8 @@ class TextNode():
                         text += "**"  # Add "**" to the text part
                         i += 2  # Skip the "**"
                     elif node.text[i:i + len(delimiter)] == delimiter:
-                        print(f"  Found delimiter at index {i}")
                         if text:
                             parts.append(text)
-                        print(f"  Parts list updated: {parts}")
                         text = ""
                         delimiter_count += 1
                         i += len(delimiter)
@@ -88,7 +86,6 @@ class TextNode():
                         text += node.text[i]
                         i += 1
                 parts.append(text)
-                print(f"  Final parts list: {parts}")
 
                 if delimiter_count % 2 != 0:
                     raise SyntaxError(f"Invalid Markdown syntax: unmatched delimiter '{delimiter}'")
@@ -105,3 +102,15 @@ class TextNode():
                 new_nodes.append(node)
 
         return new_nodes
+
+    @staticmethod
+    def extract_markdown_images(text):
+        pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+        matches = re.findall(pattern, text)
+        return matches
+
+    @staticmethod
+    def extract_markdown_links(text):
+        pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+        matches = re.findall(pattern, text)
+        return matches
