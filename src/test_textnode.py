@@ -79,47 +79,96 @@ class TestTextNode(unittest.TestCase):
     def test_extract_markdown_images_basic(self):
         text = "This is an image: ![Alt text](https://example.com/image.jpg)"
         expected = [("Alt text", "https://example.com/image.jpg")]
-        self.assertEqual(TextNode.extract_markdown_images(text), expected)
+        self.assertEqual(TextNode._extract_markdown_images(text), expected)
 
     def test_extract_markdown_images_multiple(self):
         text = "Image 1: ![Alt 1](url1), Image 2: ![Alt 2](url2)"
         expected = [("Alt 1", "url1"), ("Alt 2", "url2")]
-        self.assertEqual(TextNode.extract_markdown_images(text), expected)
+        self.assertEqual(TextNode._extract_markdown_images(text), expected)
 
     def test_extract_markdown_images_no_images(self):
         text = "This text has no images."
         expected = []
-        self.assertEqual(TextNode.extract_markdown_images(text), expected)
+        self.assertEqual(TextNode._extract_markdown_images(text), expected)
 
     def test_extract_markdown_images_empty_text(self):
         text = ""
         expected = []
-        self.assertEqual(TextNode.extract_markdown_images(text), expected)
+        self.assertEqual(TextNode._extract_markdown_images(text), expected)
 
     def test_extract_markdown_links_basic(self):
         text = "This is a link: [Link text](https://example.com)"
         expected = [("Link text", "https://example.com")]
-        self.assertEqual(TextNode.extract_markdown_links(text), expected)
+        self.assertEqual(TextNode._extract_markdown_links(text), expected)
 
     def test_extract_markdown_links_multiple(self):
         text = "Link 1: [Text 1](url1), Link 2: [Text 2](url2)"
         expected = [("Text 1", "url1"), ("Text 2", "url2")]
-        self.assertEqual(TextNode.extract_markdown_links(text), expected)
+        self.assertEqual(TextNode._extract_markdown_links(text), expected)
 
     def test_extract_markdown_links_no_links(self):
         text = "This text has no links."
         expected = []
-        self.assertEqual(TextNode.extract_markdown_links(text), expected)
+        self.assertEqual(TextNode._extract_markdown_links(text), expected)
 
     def test_extract_markdown_links_empty_text(self):
         text = ""
         expected = []
-        self.assertEqual(TextNode.extract_markdown_links(text), expected)
+        self.assertEqual(TextNode._extract_markdown_links(text), expected)
 
     def test_extract_markdown_links_exclude_images(self):
         text = "Link: [Text](url), Image: ![Alt](img_url)"
         expected = [("Text", "url")]  # Should not include the image
-        self.assertEqual(TextNode.extract_markdown_links(text), expected)
+        self.assertEqual(TextNode._extract_markdown_links(text), expected)
+
+    def test_split_nodes_images_and_links_basic_image(self):
+        nodes = [TextNode("This is an image: ![Alt text](https://example.com/image.jpg)", TextType.TEXT)]
+        result = TextNode.split_nodes_images_and_links(nodes)
+        expected = [
+            TextNode("This is an image: ", TextType.TEXT),
+            TextNode("Alt text", TextType.IMAGE, url="https://example.com/image.jpg")  # Updated expected result
+        ]
+        self.assertEqual(result, expected)
+
+    def test_split_nodes_images_and_links_basic_link(self):
+        nodes = [TextNode("This is a link: [Link text](https://example.com)", TextType.TEXT)]
+        result = TextNode.split_nodes_images_and_links(nodes)
+        expected = [
+            TextNode("This is a link: ", TextType.TEXT),
+            TextNode("Link text", TextType.LINK, url="https://example.com")
+        ]
+        self.assertEqual(result, expected)
+
+    def test_split_nodes_images_and_links_multiple_images_and_links(self):
+        nodes = [TextNode("Image: ![Alt 1](url1), Link: [Text 1](url2), Image: ![Alt 2](url3)", TextType.TEXT)]
+        result = TextNode.split_nodes_images_and_links(nodes)
+        expected = [
+            TextNode("Image: ", TextType.TEXT),
+            TextNode("Alt 1", TextType.IMAGE, url="url1"),  # Updated expected result
+            TextNode(", Link: ", TextType.TEXT),
+            TextNode("Text 1", TextType.LINK, url="url2"),
+            TextNode(", Image: ", TextType.TEXT),
+            TextNode("Alt 2", TextType.IMAGE, url="url3")  # Updated expected result
+        ]
+        self.assertEqual(result, expected)
+
+    def test_split_nodes_images_and_links_no_images_or_links(self):
+        nodes = [TextNode("This text has no images or links.", TextType.TEXT)]
+        result = TextNode.split_nodes_images_and_links(nodes)
+        expected = [TextNode("This text has no images or links.", TextType.TEXT)]
+        self.assertEqual(result, expected)
+
+    def test_split_nodes_images_and_links_empty_text(self):
+        nodes = [TextNode("", TextType.TEXT)]
+        result = TextNode.split_nodes_images_and_links(nodes)
+        expected = [TextNode("", TextType.TEXT)]
+        self.assertEqual(result, expected)
+
+    def test_split_nodes_images_and_links_non_text_node(self):
+        nodes = [TextNode("Some text", TextType.BOLD)]
+        result = TextNode.split_nodes_images_and_links(nodes)
+        expected = [TextNode("Some text", TextType.BOLD)]
+        self.assertEqual(result, expected)
 
 if __name__ == "__main__":
     unittest.main()

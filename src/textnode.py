@@ -17,6 +17,8 @@ class TextNode():
         self.url = url
 
     def __eq__(self, other):
+        if not isinstance(other, TextNode):
+            raise TypeError(f"Cannot compare TextNode to {type(other)} type object '{other}'!")
         return (self.text == other.text) and (self.text_type == other.text_type) and (self.url == other.url)
 
     def __repr__(self):
@@ -104,13 +106,113 @@ class TextNode():
         return new_nodes
 
     @staticmethod
-    def extract_markdown_images(text):
+    def split_nodes_images_and_links(old_nodes):
+        """
+        Splits text nodes based on the presence of Markdown images or links.
+
+        This function uses the helper methods `_extract_image_parts`, `_extract_link_parts`,
+        and `_split_text_by_parts` to identify and split image and link nodes.
+
+        Args:
+            old_nodes (list): A list of TextNode objects.
+
+        Returns:
+            list: A new list of TextNode objects with split text nodes for images and links.
+        """
+        new_nodes = []
+        for node in old_nodes:
+            if node.text_type == TextType.TEXT:
+                image_parts = TextNode._extract_image_parts(node.text)
+                link_parts = TextNode._extract_link_parts(node.text)
+                all_parts = image_parts + link_parts
+
+                if all_parts:
+                    new_nodes.extend(TextNode._split_text_by_parts(node.text, all_parts))
+                else:
+                    new_nodes.append(node)
+            else:
+                new_nodes.append(node)
+        return new_nodes
+
+    @staticmethod
+    def _extract_image_parts(text):
+        """
+        Extracts image parts from a text string.
+
+        Args:
+            text (str): The text string to extract image parts from.
+
+        Returns:
+            list: A list of tuples, where each tuple contains:
+                - start index of the image pattern
+                - end index of the image pattern
+                - alt text of the image
+                - URL of the image
+        """
+        parts = []
+        for alt_text, url in TextNode._extract_markdown_images(text):
+            for match in re.finditer(re.escape(f"![{alt_text}]({url})"), text):
+                start, end = match.span()
+                # Add a marker to indicate it's an image part
+                parts.append((start, end, alt_text, url, "image"))  
+        return parts
+
+    @staticmethod
+    def _extract_link_parts(text):
+        """
+        Extracts link parts from a text string.
+
+        Args:
+            text (str): The text string to extract link parts from.
+
+        Returns:
+            list: A list of tuples, where each tuple contains:
+                - start index of the link pattern
+                - end index of the link pattern
+                - link text
+                - URL of the link
+        """
+        parts = []
+        for link_text, url in TextNode._extract_markdown_links(text):
+            for match in re.finditer(re.escape(f"[{link_text}]({url})"), text):
+                start, end = match.span()
+                # Add a marker to indicate it's a link part
+                parts.append((start, end, link_text, url, "link"))  
+        return parts
+
+    @staticmethod
+    def _split_text_by_parts(text, parts):
+        """
+        Splits a text string into parts based on the given parts list.
+
+        Args:
+            text (str): The text string to split.
+            parts (list): A list of tuples, where each tuple contains the start and end indices of a part.
+
+        Returns:
+            list: A list of TextNode objects representing the split text.
+        """
+        nodes = []
+        last_end = 0
+        for start, end, text_content, url, part_type in sorted(parts):  # Include part_type
+            if text[last_end:start]:
+                nodes.append(TextNode(text[last_end:start], TextType.TEXT))
+            # Determine node type based on part_type
+            node_type = TextType.IMAGE if part_type == "image" else TextType.LINK  
+            nodes.append(TextNode(text_content, node_type, url=url))
+            last_end = end
+        if last_end < len(text):
+            nodes.append(TextNode(text[last_end:], TextType.TEXT))
+        return nodes
+
+    @staticmethod
+    def _extract_markdown_images(text):
         pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
         matches = re.findall(pattern, text)
         return matches
 
     @staticmethod
-    def extract_markdown_links(text):
+    def _extract_markdown_links(text):
         pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
         matches = re.findall(pattern, text)
         return matches
