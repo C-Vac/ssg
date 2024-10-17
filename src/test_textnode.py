@@ -170,5 +170,64 @@ class TestTextNode(unittest.TestCase):
         expected = [TextNode("Some text", TextType.BOLD)]
         self.assertEqual(result, expected)
 
+    def test_from_markdown_basic(self):
+        text = "This is *italic* and **bold** text."
+        result = TextNode.from_markdown(text)
+        expected = [
+            TextNode("This is ", TextType.TEXT),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" and ", TextType.TEXT),
+            TextNode("bold", TextType.BOLD),
+            TextNode(" text.", TextType.TEXT)
+        ]
+        self.assertEqual(result, expected)
+
+    def test_from_markdown_with_image(self):
+        text = "This is an image: ![Alt text](image.jpg)"
+        result = TextNode.from_markdown(text)
+        expected = [
+            TextNode("This is an image: ", TextType.TEXT),
+            TextNode("Alt text", TextType.IMAGE, url="image.jpg")
+        ]
+        self.assertEqual(result, expected)
+
+    def test_from_markdown_with_link(self):
+        text = "This is a link: [Link text](link.com)"
+        result = TextNode.from_markdown(text)
+        expected = [
+            TextNode("This is a link: ", TextType.TEXT),
+            TextNode("Link text", TextType.LINK, url="link.com")
+        ]
+        self.assertEqual(result, expected)
+
+    def test_from_markdown_with_code(self):
+        text = "This is `code`."
+        result = TextNode.from_markdown(text)
+        expected = [
+            TextNode("This is ", TextType.TEXT),
+            TextNode("code", TextType.CODE),
+            TextNode(".", TextType.TEXT)
+        ]
+        self.assertEqual(result, expected)
+
+    def test_from_markdown_complex(self):
+        text = "This is *italic* and **bold** text with an image: ![Alt text](image.jpg) and a link: [Link text](link.com) and some `code`."
+        result = TextNode.from_markdown(text)
+        expected = [
+            TextNode("This is ", TextType.TEXT),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" and ", TextType.TEXT),
+            TextNode("bold", TextType.BOLD),
+            TextNode(" text with an image: ", TextType.TEXT),
+            TextNode("Alt text", TextType.IMAGE, url="image.jpg"),
+            TextNode(" and a link: ", TextType.TEXT),
+            TextNode("Link text", TextType.LINK, url="link.com"),
+            TextNode(" and some ", TextType.TEXT),
+            TextNode("code", TextType.CODE),
+            TextNode(".", TextType.TEXT)
+        ]
+        self.assertEqual(result, expected)
+
+
 if __name__ == "__main__":
     unittest.main()

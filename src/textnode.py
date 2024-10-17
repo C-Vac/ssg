@@ -24,6 +24,24 @@ class TextNode():
     def __repr__(self):
         return f"TextNode({self.text}, {self.text_type}, {self.url})"
 
+    @classmethod
+    def from_markdown(cls, text):
+        """
+        Creates a list of TextNode objects from a Markdown text string.
+
+        Args:
+            text (str): The Markdown text to parse.
+
+        Returns:
+            list: A list of TextNode objects representing the parsed Markdown text.
+        """
+        nodes = [TextNode(text, TextType.TEXT)]
+        nodes = cls.split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+        nodes = cls.split_nodes_delimiter(nodes, "**", TextType.BOLD)
+        nodes = cls.split_nodes_delimiter(nodes, "`", TextType.CODE)
+        nodes = cls.split_nodes_images_and_links(nodes)
+        return nodes
+
     @staticmethod
     def split_nodes_delimiter(old_nodes, delimiter: str, text_type: TextType):
         """
@@ -138,16 +156,6 @@ class TextNode():
     def _extract_image_parts(text):
         """
         Extracts image parts from a text string.
-
-        Args:
-            text (str): The text string to extract image parts from.
-
-        Returns:
-            list: A list of tuples, where each tuple contains:
-                - start index of the image pattern
-                - end index of the image pattern
-                - alt text of the image
-                - URL of the image
         """
         parts = []
         for alt_text, url in TextNode._extract_markdown_images(text):
@@ -161,16 +169,6 @@ class TextNode():
     def _extract_link_parts(text):
         """
         Extracts link parts from a text string.
-
-        Args:
-            text (str): The text string to extract link parts from.
-
-        Returns:
-            list: A list of tuples, where each tuple contains:
-                - start index of the link pattern
-                - end index of the link pattern
-                - link text
-                - URL of the link
         """
         parts = []
         for link_text, url in TextNode._extract_markdown_links(text):
@@ -184,13 +182,6 @@ class TextNode():
     def _split_text_by_parts(text, parts):
         """
         Splits a text string into parts based on the given parts list.
-
-        Args:
-            text (str): The text string to split.
-            parts (list): A list of tuples, where each tuple contains the start and end indices of a part.
-
-        Returns:
-            list: A list of TextNode objects representing the split text.
         """
         nodes = []
         last_end = 0
