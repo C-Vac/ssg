@@ -21,3 +21,14 @@ The vast majority of our coding will happen in the src/ directory because almost
 2. Write the full HTML string to a file for that page in the /public directory.
 
 USE python3 -m http.server 8888 TO START SERVER
+
+Full name
+email address
+create a code word (word number phrase not over 4 words)
+request information regarding transactions
+request to reactivate card
+best time to be called back
+signature three times
+color copy of DL
+
+cco_resolution@navyfederal.org
