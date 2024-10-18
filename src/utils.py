@@ -3,21 +3,39 @@
 from htmlnode import HTMLNode, ParentNode, LeafNode
 from textnode import TextNode, TextType
 
+
 def markdown_to_html_node(markdown):
-    blocks = markdown_to_blocks(markdown) # we have the blocks
-    nodes = []
 
-    for block in blocks:
-        block_type = block_to_block_type(block)
-        
-        text_nodes = []
-        match block_type:
-            case "paragraph":
-                text_nodes.extend(TextNode.from_markdown(block))
-            case _:
-                raise Exception("What are u smokin homie?")
-    return nodes
+    blocks = markdown_to_blocks(markdown)  # we have the blocks
+    html_nodes = []
 
+    for block in blocks: # Process the block into an HTMLNode
+        node = block_to_html_node(block)
+        html_nodes.append(node)
+
+    doc_node = ParentNode(children=html_nodes, tag="div")
+    return doc_node
+
+def block_to_html_node(block):
+    t = block_to_block_type(block)
+    
+    match t:
+        case "heading":
+            pass
+        case "code":
+            pass
+        case "quote":
+            pass
+        case "unordered_list":
+            pass
+        case "ordered_list":
+            pass
+        case "paragraph":
+            pass
+        case _:
+            raise Exception(f"Markdown format could not be identified for block: {block}")
+
+    return HTMLNode()
 
 def markdown_to_blocks(markdown):
     """
@@ -46,9 +64,10 @@ def markdown_to_blocks(markdown):
             block = ""
         else:
             block += line.strip() + "\n"
-    if block:  # Add the last block if it's not empty
+    if block:
         blocks.append(block.strip())
     return blocks
+
 
 def block_to_block_type(block):
     """
@@ -82,7 +101,7 @@ def block_to_block_type(block):
     """
     lines = block.splitlines()
     if len(lines) == 0:
-      return "paragraph"
+        return "paragraph"
     if lines[0].startswith("#"):
         return "heading"
     if lines[0].startswith("```") and lines[-1].startswith("```"):
