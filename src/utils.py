@@ -76,7 +76,52 @@ def publish_static_content():
     print("\n> Copying contents of '/static' to '/public'.")
     copy_directory(static_root)
 
-def generate_html_document(markdown_file):
+def generate_html_content(): # TODO: current objective
+    """
+    Reads the contents of the 'content' directory, then creates directories and generates html files in 'static'.
+    """
+    with os.scandir("content") as files:
+        for dir_entry in files:
+            target_path = ""
+            html_path = ""
+
+            # Process root index.md file
+            if dir_entry.is_file() and dir_entry.name.endswith(".md"):
+                target_path = "content/index.md"
+                html_path = "static/index.html"
+
+            # Process content file in subdir
+            elif not dir_entry.is_file():
+                with os.scandir(dir_entry.path) as pages:
+                    if not len(pages) == 1:
+                        print(f"!-- Must be exactly one file per subdirectory in 'content/': " + dir_entry.path)
+                        break
+                    md_file = pages[0]
+                    if not md_file.path.endswith(".md"):
+                        print("!-- Content must be a '.md' file: " + dir_entry.path)
+                        break
+
+                    target_path = md_file.path
+                    relative_path = os.path.relpath(md_file.path, "content")
+                    # eg. "page_directory/page_content.md"
+                    head, tail = os.path.split(relative_path)
+                    # eg. ("page_directory/", "page_content.md")
+                    html_path = os.path.join("static/", head, tail.strip(".md") + ".html")
+                    # eg. "static/page_directory/page_content.html"
+                    new_dir = os.path.dirname(html_path)
+
+                    # Make sure directory exists
+                    if not os.path.exists(new_dir):
+                        os.mkdir(new_dir)
+
+            html = generate_html_document(target_path)
+
+            # Create new html file or overwrite the existing file
+            with open(html_path, "x") as html_file:
+                html_file.write(html)
+
+
+def generate_html_document(md_file): # TODO: fix this shit
     """
     Converts a Markdown file to an HTML document string.
 
@@ -87,10 +132,13 @@ def generate_html_document(markdown_file):
         html: String containing full HTML text.
     """
     try:
-        with open(markdown_file, "r") as f:
-            markdown = f.read()
+        with open(md_file, "r") as f:
+            md_text = f.read()
+        html_node = markdown_to_html_node(md_text)
 
-        html_node = markdown_to_html_node(markdown)
+        _, filename = os.path.split(md_file)
+        filename = filename.strip(".md")
+
         html_head = """
 <!doctype html>
 <head>
@@ -100,10 +148,12 @@ def generate_html_document(markdown_file):
 </head>
 
 """
-        html_body = "<body>\n\t" + html_node.to_html() + "</body>"
+        html_body = "<body>" + html_node.to_html() + "</body>"
         html = html_head + html_body
 
-        print(f"Successfully converted {markdown_file} to {html_file}")
+        print(f"Successfully converted {md_file} to HTML.")
+
+        return html
 
     except Exception as e:
         print(f"Error converting Markdown to HTML: {e}")
@@ -307,3 +357,25 @@ def block_to_block_type(block: str):
     if all(line.startswith(str(i + 1) + ". ") for i, line in enumerate(lines)):
         return "ordered_list"
     return "paragraph"
+
+def analyze_paths(filepath, dirpath):
+    """Analyzes and prints various path manipulations.
+
+    Args:
+        filepath (str): The path to a file.
+        dirpath (str): The path to a directory.
+    """
+
+    path_data = {
+        "filepath": filepath,
+        "dirpath": dirpath,
+        "--FUNC--": "--RETURN--",
+        "filename": os.path.basename(filepath),
+        "split_str": filepath.split(os.sep),
+        "split_os": os.path.split(filepath),
+        "dirname": os.path.dirname(filepath),
+        "relative_file": os.path.relpath(filepath, dirpath),
+        "relative_dir": os.path.relpath(dirpath, filepath),
+    }
+    for key, value in path_data.items():
+        print(f"{key}:\t{value}")
