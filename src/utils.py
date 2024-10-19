@@ -10,7 +10,7 @@ def publish_static_content():
     public_root = "public"
     static_root = "static"
 
-    print(f"Publishing contents of '{static_root}' to '{public_root}'.")
+    print(f"\n---Publishing contents of '{static_root}' to '{public_root}'.---\n")
 
     def copy_directory(static_dir):
         nonlocal public_root
@@ -44,7 +44,7 @@ def publish_static_content():
             files_copied += 1
             copy_file(files, public_dir) # Repeats until the list of files is empty
 
-        print(f"\t> Adding files in {static_dir} to be copied.")
+        print(f"> Copying files in '{static_dir}'.")
 
         public_dir = "" # Root directory
         if not static_dir == static_root:
@@ -52,8 +52,8 @@ def publish_static_content():
             public_dir = os.path.join(public_root, relative_path)
             # Create directory in public matching static path
             if not os.path.exists(public_dir):
-                print(f"+ Created '{public_dir}'.")
                 os.mkdir(public_dir)
+                print(f"\t\t+ Created dir '{public_dir}'.")
 
         # Build list of files in the current directory
         file_paths = []
@@ -68,15 +68,21 @@ def publish_static_content():
         copy_file(file_paths, public_dir)
 
     if not os.path.exists(static_root):
-        raise FileNotFoundError(f"No directory found at '{static_root}'!")
+        raise FileNotFoundError(f"!-- No directory found at '{static_root}'!")
     if os.path.exists(public_root):
-        shutil.rmtree(public_root)
-        print("- Removed '/public' and contents.")
-    os.mkdir(public_root)
-    print("+ Created empty '/public'.")
+        for filename in os.listdir(public_root):
+            filepath = os.path.join(public_root, filename)
+            try:
+                if os.path.isfile(filepath) or os.path.islink(filepath):
+                    os.unlink(filepath)
+                elif os.path.isdir(filepath):
+                    shutil.rmtree(filepath)
+            except Exception as e:
+                print(f"Failed to delete {filepath}. Reason: {e}")
+        print("- Emptied '/public' directory.")
 
-    print("\n> Copying contents of '/static' to '/public'.")
     copy_directory(static_root)
+    print("\n--- Done. Pages are ready to serve. ---\n")
 
 def generate_html_content():
     """
@@ -112,9 +118,10 @@ def generate_html_content():
                     head, tail = os.path.split(relative_path)
                     # eg. ("page_directory/", "page_content.md")
                     
-                    # NOTE: RENAMES FILES TO index.html FOR NOW
+                    # NOTE: This names all docs as "index.html"
                     html_path = os.path.join("static/", head, "index.html")
-                    # html_path = os.path.join("static/", head, tail.strip(".md") + ".html")
+                    # For custom named html documents:
+                        # html_path = os.path.join("static/", head, tail.strip(".md") + ".html")
                     # eg. "static/page_directory/page_content.html"
                     new_dir = os.path.dirname(html_path)
 
@@ -123,13 +130,12 @@ def generate_html_content():
                         os.mkdir(new_dir)
 
             if target_path == "":
-                print("!! Something went wrong with getting the target path to convert a MD file to HTML.")
+                print("!!! Something went wrong while getting the target path to convert the MD file to HTML. (This should literally never happen.)")
             html = generate_html_document(target_path)
 
             # Create new html file or overwrite the existing file
             with open(html_path, "w") as html_file:
                 html_file.write(html)
-
 
 def generate_html_document(md_file):
     """

@@ -6,29 +6,31 @@
 > Successfully converted content/page1/page1.md to HTML.
 > Processing file: content/goblin/goblin.md
 > Successfully converted content/goblin/goblin.md to HTML.
-Publishing contents of 'static' to 'public'.
-- Removed '/public' and contents.
-+ Created empty '/public'.
 
-> Copying contents of '/static' to '/public'.
-	> Adding files in static to be copied.
-	> Adding files in static/page2 to be copied.
-+ Created 'public/page2'.
+---Publishing contents of 'static' to 'public'.---
+
+- Emptied '/public' directory.
+> Copying files in 'static'.
+> Copying files in 'static/page2'.
+		+ Created dir 'public/page2'.
 		+ Copied static/page2/index.html to public/page2/index.html.
 	> Copied 1 files to public/page2.
-	> Adding files in static/page1 to be copied.
-+ Created 'public/page1'.
+> Copying files in 'static/page1'.
+		+ Created dir 'public/page1'.
 		+ Copied static/page1/index.html to public/page1/index.html.
 	> Copied 1 files to public/page1.
-	> Adding files in static/images to be copied.
-+ Created 'public/images'.
+> Copying files in 'static/images'.
+		+ Created dir 'public/images'.
 		+ Copied static/images/gooblin-cave.webp to public/images/gooblin-cave.webp.
 	> Copied 1 files to public/images.
-	> Adding files in static/goblin to be copied.
-+ Created 'public/goblin'.
+> Copying files in 'static/goblin'.
+		+ Created dir 'public/goblin'.
 		+ Copied static/goblin/index.html to public/goblin/index.html.
 		+ Copied static/goblin/goblin.css to public/goblin/goblin.css.
 	> Copied 2 files to public/goblin.
 		+ Copied static/index.css to public/index.css.
 		+ Copied static/index.html to public/index.html.
 	> Copied 2 files to .
+
+--- Done. Pages are ready to serve. ---
+
