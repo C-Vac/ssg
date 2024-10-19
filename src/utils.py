@@ -1,11 +1,57 @@
 # utils.py
 
 import re
+import os
+import shutil
 from htmlnode import HTMLNode, ParentNode, LeafNode
 from textnode import TextNode
 
+def publish_static_content():
+    public_root = "./public/"
+    static_root = "./static"
+
+    def copy_files(static_path):
+        nonlocal public_root
+
+        def copy_file(files):
+            nonlocal log_string
+            files_copied = 0
+
+            if len(files) < 1:
+                log_string = f"Finished copying {files_copied} files to /public."
+                return
+            filepath = paths_list.pop()
+            new_path = os.path.join(public_root, filepath)
+            shutil.copy(filepath, new_path)
+            print(f"Copied {filepath} to {new_path}.")
+            files_copied += 1
+            copy_file()
+
+        paths_list = []
+        with os.scandir(static_path) as contents:
+            for file in contents:
+                if file.is_file():
+                    paths_list.append(file)
+                elif file.is_dir():
+                    dir_path = os.path.join(static_path, file)
+                    print(f"Adding files in {dir_path} to be copied.")
+                    copy_files(dir_path)
+        log_string = ""
+        copy_file()
+        print(log_string)
+
+    if not os.path.exists(static_root):
+        os.mkdir(static_root)
+    if not os.path.exists(public_root):
+        shutil.rmtree(public_root)
+        print("Deleted public dir and contents")
+    os.mkdir(public_root)
+    print("Created empty public directory")
+
+    copy_files(static_root)
+
 def markdown_to_html_node(markdown):
-    # TODO: this
+
     blocks = markdown_to_blocks(markdown)  # we have the blocks
     html_nodes = []
 
@@ -18,7 +64,6 @@ def markdown_to_html_node(markdown):
     return doc_node
 
 def block_to_html_node(block: str):
-    # TODO: this
 
     def text_to_children(text: str):
         """
