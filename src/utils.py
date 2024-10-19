@@ -7,48 +7,106 @@ from htmlnode import HTMLNode, ParentNode, LeafNode
 from textnode import TextNode
 
 def publish_static_content():
-    public_root = "./public/"
-    static_root = "./static"
+    public_root = "public"
+    static_root = "static"
 
-    def copy_files(static_path):
+    def copy_directory(static_dir):
         nonlocal public_root
+        files_copied = 0
 
-        def copy_file(files):
-            nonlocal log_string
-            files_copied = 0
+        def copy_file(files, public_dir):
+            """
+            Copies one file to a target directory recursively from a list of files. 
+
+            Args:
+                files (list): Strings of file paths of files to copy
+                public_dir (str): The directory where files will be copied to
+            """
+            nonlocal files_copied
+            nonlocal static_dir
 
             if len(files) < 1:
-                log_string = f"Finished copying {files_copied} files to /public."
+                print(f"\t> Copied {files_copied} files to {public_dir}.")
                 return
-            filepath = paths_list.pop()
-            new_path = os.path.join(public_root, filepath)
-            shutil.copy(filepath, new_path)
-            print(f"Copied {filepath} to {new_path}.")
-            files_copied += 1
-            copy_file()
 
-        paths_list = []
-        with os.scandir(static_path) as contents:
+            filename = files.pop()
+            # Extract the relative path within the static directory
+            file_path = os.path.join(static_dir, filename)
+            relative_path = os.path.relpath(file_path, static_root)
+            new_path = os.path.join(public_root, relative_path)
+
+            # Copy the file to the new location
+            shutil.copy(file_path, new_path)
+            print(f"\t\t+ Copied {file_path} to {new_path}.")
+
+            files_copied += 1
+            copy_file(files, public_dir) # Repeats until the list of files is empty
+
+        print(f"\t> Adding files in {static_dir} to be copied.")
+
+        public_dir = "" # Root directory
+        if not static_dir == static_root:
+            relative_path = os.path.relpath(static_dir, static_root)
+            public_dir = os.path.join(public_root, relative_path)
+            # Create directory in public matching static path
+            if not os.path.exists(public_dir):
+                print(f"+ Created '{public_dir}'.")
+                os.mkdir(public_dir)
+
+        # Build list of files in the current directory
+        file_paths = []
+        with os.scandir(static_dir) as contents:
             for file in contents:
                 if file.is_file():
-                    paths_list.append(file)
+                    file_paths.append(file.name)
                 elif file.is_dir():
-                    dir_path = os.path.join(static_path, file)
-                    print(f"Adding files in {dir_path} to be copied.")
-                    copy_files(dir_path)
-        log_string = ""
-        copy_file()
-        print(log_string)
+                    copy_directory(file.path)
+
+        # Start copying
+        copy_file(file_paths, public_dir)
 
     if not os.path.exists(static_root):
-        os.mkdir(static_root)
-    if not os.path.exists(public_root):
+        raise FileNotFoundError(f"No directory found at '{static_root}'!")
+    if os.path.exists(public_root):
         shutil.rmtree(public_root)
-        print("Deleted public dir and contents")
+        print("- Removed '/public' and contents.")
     os.mkdir(public_root)
-    print("Created empty public directory")
+    print("+ Created empty '/public'.")
 
-    copy_files(static_root)
+    print("\n> Copying contents of '/static' to '/public'.")
+    copy_directory(static_root)
+
+def generate_html_document(markdown_file):
+    """
+    Converts a Markdown file to an HTML document string.
+
+    Args:
+        markdown_file (str): The path to the Markdown file.
+
+    Returns:
+        html: String containing full HTML text.
+    """
+    try:
+        with open(markdown_file, "r") as f:
+            markdown = f.read()
+
+        html_node = markdown_to_html_node(markdown)
+        html_head = """
+<!doctype html>
+<head>
+    <base href="/goblin/">
+    <link rel="stylesheet" href="goblin.css">
+    <--- THIS SITE AND ITS CONTENTS ARE THE INTELLECTUAL PROPERTY OF GG OCDWARE, ALL RIGHTS RESERVED --->
+</head>
+
+"""
+        html_body = "<body>\n\t" + html_node.to_html() + "</body>"
+        html = html_head + html_body
+
+        print(f"Successfully converted {markdown_file} to {html_file}")
+
+    except Exception as e:
+        print(f"Error converting Markdown to HTML: {e}")
 
 def markdown_to_html_node(markdown):
 
