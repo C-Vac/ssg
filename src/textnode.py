@@ -39,8 +39,8 @@ class TextNode():
             list: A list of TextNode objects representing the parsed Markdown text.
         """
         nodes = [TextNode(text, TextType.TEXT)]
-        nodes = cls.split_nodes_delimiter(nodes, "*", TextType.ITALIC)
         nodes = cls.split_nodes_delimiter(nodes, "**", TextType.BOLD)
+        nodes = cls.split_nodes_delimiter(nodes, "*", TextType.ITALIC)
         nodes = cls.split_nodes_delimiter(nodes, "`", TextType.CODE)
         nodes = cls.split_nodes_images_and_links(nodes)
         return nodes

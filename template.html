@@ -4,17 +4,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <base href="/page1/">
+  <base href="/{{ Base }}">
   <link rel="stylesheet" href="../index.css">
-  <link rel="stylesheet" href="page1.css">
+  <link rel="stylesheet" href="{{ Style }}.css">
 
   <!-- THIS SITE AND ITS CONTENTS ARE THE INTELLECTUAL PROPERTY OF GG OCDWARE, ALL RIGHTS RESERVED -->
-  <title> This is a markdown document. </title>
+  <title> {{ Title }} </title>
 </head>
 
 <body>
   <article>
-    <div><h1>This is a markdown document.</h1><p>The page should be accessible at /page1/</p><h3><a href="/..">Home</a></h3></div>
+    {{ Content }}
   </article>
 </body>
 

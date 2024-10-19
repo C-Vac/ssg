@@ -6,6 +6,15 @@ import shutil
 from htmlnode import HTMLNode, ParentNode, LeafNode
 from textnode import TextNode
 
+
+def extract_title(markdown: str):
+    lines = markdown.splitlines()
+    heading = lines[0]
+    if heading.startswith("# "):
+        return heading.strip("#").strip()
+    raise Exception("!-- Failed: MD file must begin with h1.")
+
+
 def publish_static_content():
     public_root = "public"
     static_root = "static"
@@ -18,7 +27,7 @@ def publish_static_content():
 
         def copy_file(files, public_dir):
             """
-            Copies one file to a target directory recursively from a list of files. 
+            Copies one file to a target directory recursively from a list of files.
 
             Args:
                 files (list): Strings of file paths of files to copy
@@ -42,11 +51,11 @@ def publish_static_content():
             print(f"\t\t+ Copied {file_path} to {new_path}.")
 
             files_copied += 1
-            copy_file(files, public_dir) # Repeats until the list of files is empty
+            copy_file(files, public_dir)  # Repeats until the list of files is empty
 
         print(f"> Copying files in '{static_dir}'.")
 
-        public_dir = "" # Root directory
+        public_dir = ""  # Root directory
         if not static_dir == static_root:
             relative_path = os.path.relpath(static_dir, static_root)
             public_dir = os.path.join(public_root, relative_path)
@@ -84,7 +93,8 @@ def publish_static_content():
     copy_directory(static_root)
     print("\n--- Done. Pages are ready to serve. ---\n")
 
-def generate_html_content():
+
+def generate_static_content():
     """
     Reads the contents of the 'content' directory, then creates directories and generates html files in 'static' for each markdown file found in each subdirectory and in the root of 'content'.
     """
@@ -105,7 +115,10 @@ def generate_html_content():
                     for entry in pages:
                         page_paths.append(entry.path)
                     if not len(page_paths) == 1:
-                        print(f"!-- Must be exactly one file per subdirectory in 'content/': " + dir_entry.path)
+                        print(
+                            f"!-- Must be exactly one file per subdirectory in 'content/': "
+                            + dir_entry.path
+                        )
                         break
                     md_file = page_paths[0]
                     if not md_file.endswith(".md"):
@@ -117,11 +130,11 @@ def generate_html_content():
                     # eg. "page_directory/page_content.md"
                     head, tail = os.path.split(relative_path)
                     # eg. ("page_directory/", "page_content.md")
-                    
+
                     # NOTE: This names all docs as "index.html"
                     html_path = os.path.join("static/", head, "index.html")
                     # For custom named html documents:
-                        # html_path = os.path.join("static/", head, tail.strip(".md") + ".html")
+                    # html_path = os.path.join("static/", head, tail.strip(".md") + ".html")
                     # eg. "static/page_directory/page_content.html"
                     new_dir = os.path.dirname(html_path)
 
@@ -130,16 +143,19 @@ def generate_html_content():
                         os.mkdir(new_dir)
 
             if target_path == "":
-                print("!!! Something went wrong while getting the target path to convert the MD file to HTML. (This should literally never happen.)")
+                print(
+                    "!!! Something went wrong while getting the target path to convert the MD file to HTML. (This should literally never happen.)"
+                )
             html = generate_html_document(target_path)
 
             # Create new html file or overwrite the existing file
             with open(html_path, "w") as html_file:
                 html_file.write(html)
 
+
 def generate_html_document(md_file):
     """
-    Converts a Markdown file to an HTML document string.
+    Converts a Markdown file to an HTML document string using a template.
 
     Args:
         markdown_file (str): The path to the Markdown file.
@@ -147,40 +163,51 @@ def generate_html_document(md_file):
     Returns:
         html: String containing full HTML text.
     """
+
+    template_path = "template.html"
+    template = ""
+
     try:
-        print(f"> Processing file: {md_file}")
+        print(f"> Creating HTML doc from '{md_file}' and template: {template_path}")
+
+        with open(template_path, "r") as f:
+            template = f.read()
+
         with open(md_file, "r") as f:
             md_text = f.read()
-        html_node = markdown_to_html_node(md_text)
+
+        lines = md_text.splitlines()
+        page_title = extract_title(lines[0])
+        content_text = "\n".join(lines)
+
+        html_node = markdown_to_html_node(content_text)
 
         head, tail = os.path.split(md_file)
-        filename = tail.strip(".md")
+        stylename = tail[:-3]
 
         base_path = ""
         if head == "content":
             base_path = ""
         else:
             base_path = os.path.relpath(head, "content") + "/"
-        head_parts = [
-            "<!doctype html>",
-            "<head>",
-            f"<base href=\"/{base_path}\">",
-            f"<link rel=\"stylesheet\" href=\"{filename}.css\">",
-            "<!-- THIS SITE AND ITS CONTENTS ARE THE INTELLECTUAL PROPERTY OF GG OCDWARE, ALL RIGHTS RESERVED -->",
-            "</head>"
-        ]
-        html_head = ""
-        for part in head_parts:
-            html_head += part
 
-        html_body = "<body>" + html_node.to_html() + "</body>"
-        html = html_head + html_body
+        content = html_node.to_html()
+        html = fill_template(page_title, content, base_path, stylename, template)
 
-        print(f"> Successfully converted {md_file} to HTML.")
+        print(f"\t+ Success.")
         return html
 
     except Exception as e:
         print(f"!-- Error converting Markdown to HTML: {e}")
+
+
+def fill_template(title, content, base, style, template: str):
+    filled = template.replace("{{ Title }}", title)
+    filled = filled.replace("{{ Content }}", content)
+    filled = filled.replace("{{ Base }}", base)
+    filled = filled.replace("{{ Style }}", style)
+    return filled
+
 
 def markdown_to_html_node(markdown):
 
@@ -194,6 +221,7 @@ def markdown_to_html_node(markdown):
     # Assemble the Master Node
     doc_node = ParentNode(children=html_nodes, tag="div")
     return doc_node
+
 
 def block_to_html_node(block: str):
 
@@ -268,7 +296,8 @@ def block_to_html_node(block: str):
 
         children = text_to_children(new_block)
         paragraph_node = ParentNode(tag="p", children=children)
-        return ParentNode(tag="blockquote", children=[paragraph_node])
+        # return ParentNode(tag="blockquote", children=[paragraph_node])
+        return ParentNode(tag="blockquote", children=children)
 
     def extract_unordered_list(ul_block: str):
         lines = ul_block.split("\n")
@@ -306,7 +335,8 @@ def block_to_html_node(block: str):
                 f"Markdown format could not be identified for block: {block}"
             )
 
-def markdown_to_blocks(markdown):
+
+def markdown_to_blocks(markdown: str):
     """
     Splits a Markdown string into blocks based on empty lines.
 
@@ -330,12 +360,14 @@ def markdown_to_blocks(markdown):
             if block == "":
                 continue
             blocks.append(block.strip())
+            print(f"---DEBUG--- \n\tBlock: {block}")
             block = ""
         else:
             block += line.strip() + "\n"
     if block:
-        blocks.append(block.strip())
+        blocks.append(block.rstrip())
     return blocks
+
 
 def block_to_block_type(block: str):
     """
@@ -381,6 +413,7 @@ def block_to_block_type(block: str):
     if all(line.startswith(str(i + 1) + ". ") for i, line in enumerate(lines)):
         return "ordered_list"
     return "paragraph"
+
 
 def analyze_paths(filepath, dirpath):
     """Analyzes and prints various path manipulations.

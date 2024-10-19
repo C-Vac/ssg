@@ -1,11 +1,438 @@
-> Processing file: content/index.md
-> Successfully converted content/index.md to HTML.
-> Processing file: content/page2/page2.md
-> Successfully converted content/page2/page2.md to HTML.
-> Processing file: content/page1/page1.md
-> Successfully converted content/page1/page1.md to HTML.
-> Processing file: content/goblin/goblin.md
-> Successfully converted content/goblin/goblin.md to HTML.
+> Creating HTML doc from 'content/index.md' and template: template.html
+---DEBUG--- 
+	Block: # Tolkien Fan Club
+
+---DEBUG--- 
+	Block: **I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn't work yet)
+
+---DEBUG--- 
+	Block: > All that is gold does not glitter
+
+---DEBUG--- 
+	Block: ## Reasons I like Tolkien
+
+---DEBUG--- 
+	Block: * You can spend years studying the legendarium and still not understand its depths
+* It can be enjoyed by children and adults alike
+* Disney *didn't ruin it*
+* It created an entirely new genre of fantasy
+
+---DEBUG--- 
+	Block: ## My favorite characters (in order)
+
+---DEBUG--- 
+	Block: 1. Gandalf
+2. Bilbo
+3. Sam
+4. Glorfindel
+5. Galadriel
+6. Elrond
+7. Thorin
+8. Sauron
+9. Aragorn
+
+---DEBUG--- 
+	Block: Here's what `elflang` looks like (the perfect coding language):
+
+---DEBUG--- 
+	Block: ```
+func main(){
+fmt.Println("Hello, World!")
+}
+```
+
+---DEBUG--- 
+	Block: ## [Goblin Mode](/goblin)
+
+---DEBUG--- 
+	Block: ### [Page 1](/page1)
+
+	+ Success.
+> Creating HTML doc from 'content/page2/page2.md' and template: template.html
+---DEBUG--- 
+	Block: # This is another markdown document.
+
+	+ Success.
+> Creating HTML doc from 'content/page1/page1.md' and template: template.html
+---DEBUG--- 
+	Block: # This is a markdown document.
+
+---DEBUG--- 
+	Block: The page should be accessible at /page1/
+
+	+ Success.
+> Creating HTML doc from 'content/majesty/majesty.md' and template: template.html
+---DEBUG--- 
+	Block: # The Unparalleled Majesty of "The Lord of the Rings"
+
+---DEBUG--- 
+	Block: [Back Home](/)
+
+---DEBUG--- 
+	Block: ![LOTR image artistmonkeys](/images/rivendell.png)
+
+---DEBUG--- 
+	Block: > "I cordially dislike allegory in all its manifestations, and always have done so since I grew old and wary enough to detect its presence.
+> I much prefer history, true or feigned, with its varied applicability to the thought and experience of readers.
+> I think that many confuse 'applicability' with 'allegory'; but the one resides in the freedom of the reader, and the other in the purposed domination of the author."
+
+---DEBUG--- 
+	Block: In the annals of fantasy literature and the broader realm of creative world-building, few sagas can rival the intricate tapestry woven by J.R.R. Tolkien in *The Lord of the Rings*. You can find the [wiki here](https://lotr.fandom.com/wiki/Main_Page).
+
+---DEBUG--- 
+	Block: ## Introduction
+
+---DEBUG--- 
+	Block: This series, a cornerstone of what I, in my many years as an **Archmage**, have come to recognize as the pinnacle of imaginative creation, stands unrivaled in its depth, complexity, and the sheer scope of its *legendarium*. As we embark on this exploration, let us delve into the reasons why this monumental work is celebrated as the finest in the world.
+
+---DEBUG--- 
+	Block: ## A Rich Tapestry of Lore
+
+---DEBUG--- 
+	Block: One cannot simply discuss *The Lord of the Rings* without acknowledging the bedrock upon which it stands: **The Silmarillion**. This compendium of mythopoeic tales sets the stage for Middle-earth's history, from the creation myth of Eä to the epic sagas of the Elder Days. It is a testament to Tolkien's unparalleled skill as a linguist and myth-maker, crafting:
+
+---DEBUG--- 
+	Block: 1. [ ] An elaborate pantheon of deities (the `Valar` and `Maiar`)
+2. [ ] The tragic saga of the Noldor Elves
+3. [ ] The rise and fall of great kingdoms such as Gondolin and Númenor
+
+---DEBUG--- 
+	Block: ```
+print("Lord")
+print("of")
+print("the")
+print("Rings")
+```
+
+---DEBUG--- 
+	Block: ## The Art of **World-Building**
+
+---DEBUG--- 
+	Block: ### Crafting Middle-earth
+
+---DEBUG--- 
+	Block: Tolkien's Middle-earth is a realm of breathtaking diversity and realism, brought to life by his meticulous attention to detail. This world is characterized by:
+
+---DEBUG--- 
+	Block: - **Diverse Cultures and Languages**: Each race, from the noble Elves to the sturdy Dwarves, is endowed with its own rich history, customs, and language. Tolkien, leveraging his expertise in philology, constructed languages such as Quenya and Sindarin, each with its own grammar and lexicon.
+- **Geographical Realism**: The landscape of Middle-earth, from the Shire's pastoral hills to the shadowy depths of Mordor, is depicted with such vividness that it feels as tangible as our own world.
+- **Historical Depth**: The legendarium is imbued with a sense of history, with ruins, artifacts, and lore that hint at bygone eras, giving the world a lived-in, authentic feel.
+
+---DEBUG--- 
+	Block: ## Themes of *Timeless* Relevance
+
+---DEBUG--- 
+	Block: ### The *Struggle* of Good vs. Evil
+
+---DEBUG--- 
+	Block: At its heart, *The Lord of the Rings* is a timeless narrative of the perennial struggle between light and darkness, a theme that resonates deeply with the human experience. The saga explores:
+
+---DEBUG--- 
+	Block: - The resilience of the human (and hobbit) spirit in the face of overwhelming odds
+- The corrupting influence of power, epitomized by the One Ring
+- The importance of friendship, loyalty, and sacrifice
+
+---DEBUG--- 
+	Block: These universal themes lend the series a profound philosophical depth, making it a beacon of wisdom and insight for generations of readers.
+
+---DEBUG--- 
+	Block: ## A Legacy **Unmatched**
+
+---DEBUG--- 
+	Block: ### The Influence on Modern Fantasy
+
+---DEBUG--- 
+	Block: The shadow that *The Lord of the Rings* casts over the fantasy genre is both vast and deep, having inspired countless authors, artists, and filmmakers. Its legacy is evident in:
+
+---DEBUG--- 
+	Block: - The archetypal "hero's journey" that has become a staple of fantasy narratives
+- The trope of the "fellowship," a diverse group banding together to face a common foe
+- The concept of a richly detailed fantasy world, which has become a benchmark for the genre
+
+---DEBUG--- 
+	Block: ## Conclusion
+
+---DEBUG--- 
+	Block: As we stand at the threshold of this mystical realm, it is clear that *The Lord of the Rings* is not merely a series but a gateway to a world that continues to enchant and inspire. It is a beacon of imagination, a wellspring of wisdom, and a testament to the power of myth. In the grand tapestry of fantasy literature, Tolkien's masterpiece is the gleaming jewel in the crown, unmatched in its majesty and enduring in its legacy. As an Archmage who has traversed the myriad realms of magic and lore, I declare with utmost conviction: *The Lord of the Rings* reigns supreme as the greatest legendarium our world has ever known.
+
+	+ Success.
+> Creating HTML doc from 'content/goblin/goblin.md' and template: template.html
+---DEBUG--- 
+	Block: # h1 Heading
+
+---DEBUG--- 
+	Block: ## h2 Heading
+
+---DEBUG--- 
+	Block: ### h3 Heading ### [Home](/..)
+
+---DEBUG--- 
+	Block: #### h4 Heading
+
+---DEBUG--- 
+	Block: ##### h5 Heading
+
+---DEBUG--- 
+	Block: ###### h6 Heading
+
+---DEBUG--- 
+	Block: ## Typographic replacements
+
+---DEBUG--- 
+	Block: test.. test... test..... test?..... test!....
+
+---DEBUG--- 
+	Block: !!!!!! ???? ,,  -- ---
+
+---DEBUG--- 
+	Block: "Smartypants, double quotes" and 'single quotes'
+
+---DEBUG--- 
+	Block: ## Emphasis
+
+---DEBUG--- 
+	Block: **This is bold text**
+
+---DEBUG--- 
+	Block: __This is bold text__
+
+---DEBUG--- 
+	Block: *This is italic text*
+
+---DEBUG--- 
+	Block: _This is italic text_
+
+---DEBUG--- 
+	Block: ~~Strikethrough~~
+
+---DEBUG--- 
+	Block: ## Blockquotes
+
+---DEBUG--- 
+	Block: > Blockquotes can also be nested... [NOT SUPPORTED IN THE CURRENT VERSION]
+>> ...by using additional greater-than signs right next to each other...
+> > > ...or with spaces between arrows.
+
+---DEBUG--- 
+	Block: ## Lists
+
+---DEBUG--- 
+	Block: Unordered
+
+---DEBUG--- 
+	Block: + Create a list by starting a line with `+`, `-`, or `*`
++ Sub-lists are made by indenting 2 spaces [ALSO NOT SUPPORTED]:
+- Marker character change forces new list start:
+* Ac tristique libero volutpat at
++ Facilisis in pretium nisl aliquet
+- Nulla volutpat aliquam velit
++ Very easy!
+
+---DEBUG--- 
+	Block: Ordered
+
+---DEBUG--- 
+	Block: 1. Lorem ipsum dolor sit amet
+2. Consectetur adipiscing elit
+3. Integer molestie lorem at massa
+
+---DEBUG--- 
+	Block: 1. You can use sequential numbers...
+1. ...or keep all the numbers as `1.` [ALSO NOT SUPPORTED!!!]
+
+---DEBUG--- 
+	Block: Start numbering with offset:
+
+---DEBUG--- 
+	Block: 57. foo [DEFINITELY NOT SUPPORTED]
+1. bar
+
+---DEBUG--- 
+	Block: ## Code
+
+---DEBUG--- 
+	Block: Inline `code`
+
+---DEBUG--- 
+	Block: Indented code
+
+---DEBUG--- 
+	Block: // Some comments
+line 1 of code
+line 2 of code
+line 3 of code
+
+---DEBUG--- 
+	Block: Block code "fences"
+
+---DEBUG--- 
+	Block: ```
+Sample text here...
+```
+
+---DEBUG--- 
+	Block: Syntax highlighting
+
+---DEBUG--- 
+	Block: ``` js
+var foo = function (bar) {
+return bar++;
+};
+
+---DEBUG--- 
+	Block: console.log(foo(5));
+```
+
+---DEBUG--- 
+	Block: ## Tables
+
+---DEBUG--- 
+	Block: | Option | Description                                                               |
+| ------ | ------------------------------------------------------------------------- |
+| data   | path to data files to supply the data that will be passed into templates. |
+| engine | engine to be used for processing templates. Handlebars is the default.    |
+| ext    | extension to be used for dest files.                                      |
+
+---DEBUG--- 
+	Block: Right aligned columns
+
+---DEBUG--- 
+	Block: | Option |                                                               Description |
+| -----: | ------------------------------------------------------------------------: |
+|   data | path to data files to supply the data that will be passed into templates. |
+| engine |    engine to be used for processing templates. Handlebars is the default. |
+|    ext |                                      extension to be used for dest files. |
+
+---DEBUG--- 
+	Block: ## Links
+
+---DEBUG--- 
+	Block: [link text](http://dev.nodeca.com)
+
+---DEBUG--- 
+	Block: [link with title](http://nodeca.github.io/pica/demo/ "title text!")
+
+---DEBUG--- 
+	Block: Autoconverted link https://github.com/nodeca/pica (enable linkify to see)
+
+---DEBUG--- 
+	Block: ## Images
+
+---DEBUG--- 
+	Block: ![Minion](https://octodex.github.com/images/minion.png)
+![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
+
+---DEBUG--- 
+	Block: Like links, Images also have a footnote style syntax
+
+---DEBUG--- 
+	Block: ![Alt text][id]
+
+---DEBUG--- 
+	Block: With a reference later in the document defining the URL location:
+
+---DEBUG--- 
+	Block: [id]: https://octodex.github.com/images/dojocat.jpg  "The Dojocat"
+
+---DEBUG--- 
+	Block: ## Plugins
+
+---DEBUG--- 
+	Block: The killer feature of `markdown-it` is very effective support of
+[syntax plugins](https://www.npmjs.org/browse/keyword/markdown-it-plugin).
+
+---DEBUG--- 
+	Block: ### [Emojies](https://github.com/markdown-it/markdown-it-emoji)
+
+---DEBUG--- 
+	Block: > Classic markup: :wink: :cry: :laughing: :yum:
+>
+> Shortcuts (emoticons): :-) :-( 8-) ;)
+
+---DEBUG--- 
+	Block: see [how to change output](https://github.com/markdown-it/markdown-it-emoji#change-output) with twemoji.
+
+---DEBUG--- 
+	Block: ### [Subscript](https://github.com/markdown-it/markdown-it-sub) / [Superscript](https://github.com/markdown-it/markdown-it-sup)
+
+---DEBUG--- 
+	Block: - 19^th^
+- H~2~O
+
+---DEBUG--- 
+	Block: ### [\<ins>](https://github.com/markdown-it/markdown-it-ins)
+
+---DEBUG--- 
+	Block: ++Inserted text++
+
+---DEBUG--- 
+	Block: ### [\<mark>](https://github.com/markdown-it/markdown-it-mark)
+
+---DEBUG--- 
+	Block: ==Marked text==
+
+---DEBUG--- 
+	Block: ### [Footnotes](https://github.com/markdown-it/markdown-it-footnote)
+
+---DEBUG--- 
+	Block: Footnote 1 link[^first].
+
+---DEBUG--- 
+	Block: Footnote 2 link[^second].
+
+---DEBUG--- 
+	Block: Inline footnote^[Text of inline footnote] definition.
+
+---DEBUG--- 
+	Block: Duplicated footnote reference[^second].
+
+---DEBUG--- 
+	Block: [^first]: Footnote **can have markup**
+
+---DEBUG--- 
+	Block: and multiple paragraphs.
+
+---DEBUG--- 
+	Block: [^second]: Footnote text.
+
+---DEBUG--- 
+	Block: ### [Definition lists](https://github.com/markdown-it/markdown-it-deflist)
+
+---DEBUG--- 
+	Block: Term 1
+
+---DEBUG--- 
+	Block: :   Definition 1
+with lazy continuation.
+
+---DEBUG--- 
+	Block: Term 2 with *inline markup*
+
+---DEBUG--- 
+	Block: :   Definition 2
+
+---DEBUG--- 
+	Block: { some code, part of Definition 2 }
+
+---DEBUG--- 
+	Block: Third paragraph of definition 2.
+
+---DEBUG--- 
+	Block: _Compact style:_
+
+---DEBUG--- 
+	Block: Term 1
+~ Definition 1
+
+---DEBUG--- 
+	Block: Term 2
+~ Definition 2a
+~ Definition 2b
+
+---DEBUG--- 
+	Block: ### [Custom containers](https://github.com/markdown-it/markdown-it-container)
+
+	+ Success.
 
 ---Publishing contents of 'static' to 'public'.---
 
@@ -22,7 +449,12 @@
 > Copying files in 'static/images'.
 		+ Created dir 'public/images'.
 		+ Copied static/images/gooblin-cave.webp to public/images/gooblin-cave.webp.
-	> Copied 1 files to public/images.
+		+ Copied static/images/rivendell.png to public/images/rivendell.png.
+	> Copied 2 files to public/images.
+> Copying files in 'static/majesty'.
+		+ Created dir 'public/majesty'.
+		+ Copied static/majesty/index.html to public/majesty/index.html.
+	> Copied 1 files to public/majesty.
 > Copying files in 'static/goblin'.
 		+ Created dir 'public/goblin'.
 		+ Copied static/goblin/index.html to public/goblin/index.html.
