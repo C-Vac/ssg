@@ -1,6 +1,7 @@
+# textnode.py
 from enum import Enum
 import re
-  
+
 class TextType(Enum):
     TEXT = 1
     BOLD = 2
@@ -10,7 +11,9 @@ class TextType(Enum):
     IMAGE = 6
 
 class TextNode():
-
+    """
+    Represents a substring in a Markdown document and its style.
+    """
     def __init__(self, text, text_type, url=None):
         self.text = text
         self.text_type = text_type

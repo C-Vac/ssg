@@ -1,5 +1,5 @@
+# htmlnode.py
 from textnode import TextNode, TextType
-
 
 class HTMLNode:
     """
@@ -128,8 +128,8 @@ class LeafNode(HTMLNode):
         Raises:
             ValueError: If the LeafNode has no value.
         """
-        if not self.value:
-            raise ValueError("Leaf node has no value!")
+        if self.value == None:
+            raise ValueError(f"Leaf node has no value: {self}")
         if not self.tag:
             return self.value
 
@@ -137,8 +137,9 @@ class LeafNode(HTMLNode):
         if self.props:
             for key, val in self.props.items():
                 props_str = props_str + f' {key}="{val}"'
+        if self.tag == "img":
+            return f"<{self.tag}{props_str}>"
         return f"<{self.tag}{props_str}>{self.value}</{self.tag}>"
-
 
 class ParentNode(HTMLNode):
     """
