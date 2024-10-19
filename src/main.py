@@ -1,6 +1,7 @@
 import sys
 from utils import markdown_to_html_node
 
+
 def convert_markdown_to_html(markdown_file, html_file):
     """
     Converts a Markdown file to an HTML file.
@@ -14,7 +15,13 @@ def convert_markdown_to_html(markdown_file, html_file):
             markdown = f.read()
 
         html_node = markdown_to_html_node(markdown)
-        html = html_node.to_html()
+        html = (
+            """
+<!doctype html><head>
+  <base href="/goblin/">
+</head>" """
+            + html_node.to_html()
+        )
 
         with open(html_file, "w") as f:
             f.write(html)

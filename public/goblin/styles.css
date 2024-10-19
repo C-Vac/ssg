@@ -1,0 +1,101 @@
+/* Basic body styles - a canvas of chaos */
+body {
+  background-color: #0f0; /* Eye-piercing lime green */
+  font-family: "Papyrus", fantasy; /* The font of forgotten nightmares */
+  line-height: 1.8; /* Generous spacing for maximum discomfort */
+}
+
+/* Headings - a hierarchy of horrors */
+h1 {
+  font-size: 8em; /* Gargantuan headings */
+  color: #f00; /* Blood red */
+  text-shadow: 0 0 15px #00f; /* Blue aura of doom */
+  animation: pulsate 2s infinite; /* Rhythmic throbbing */
+}
+
+h2 {
+  font-size: 6em; /* Monstrous headings */
+  color: #00f; /* Electric blue */
+  text-decoration: underline overline; /* Double the lines, double the chaos */
+  transform: skewY(10deg); /* A subtle tilt into madness */
+}
+
+h3 {
+  font-size: 4em; /* Hideous headings */
+  color: #ff0; /* Blinding yellow */
+  font-style: italic; /* A touch of elegance in the chaos */
+  letter-spacing: 0.3em; /* Spread out for maximum impact */
+}
+
+h4 {
+  font-size: 3em; /* Grotesque headings */
+  color: #f0f; /* Fuchsia frenzy */
+  text-transform: uppercase; /* SHOUTING IN ALL CAPS */
+  word-spacing: 0.5em; /* Extra breathing room for those CAPITAL LETTERS */
+}
+
+h5 {
+  font-size: 2em; /* Unsettling headings */
+  color: #0ff; /* Cyan chaos */
+  font-variant: small-caps; /* A touch of formality in the madness */
+  text-align: justify; /* Justified text for maximum unease */
+}
+
+h6 {
+  font-size: 1.5em; /* Disturbing headings */
+  color: #f80; /* Orange outrage */
+  font-weight: 900; /* Bold and brash */
+  text-indent: 2em; /* Indented for no apparent reason */
+}
+
+/* Paragraphs - a symphony of sentences */
+p {
+  font-size: 1.2em; /* Slightly larger for added discomfort */
+  color: #800; /* Maroon madness */
+  text-align: center; /* Centered for maximum awkwardness */
+}
+
+/* Links - portals to pandemonium */
+a {
+  color: #08f; /* Deep sea blue */
+  font-weight: bold; /* Extra emphasis */
+  text-decoration: underline; /* The classic underline */
+  transition: all 0.5s ease; /* Smooth transitions into chaos */
+}
+
+a:hover {
+  color: #f00; /* Blood red on hover */
+  font-size: 1.5em; /* Embiggen on hover */
+  text-decoration: overline; /* Overline on hover, because why not? */
+}
+
+/* Images - a gallery of grotesqueries */
+img {
+  border: 10px dashed #f0f; /* Fuchsia dashed border */
+  box-shadow: 0 0 10px #000; /* Ominous shadow */
+  animation: rotate 5s linear infinite; /* Perpetual rotation */
+}
+
+/* Tables - a grid of grimness */
+table {
+  border-collapse: collapse; /* Collapse those borders */
+  width: 100%; /* Stretch those tables */
+}
+
+th, td {
+  border: 3px solid #000; /* Thick black borders */
+  padding: 1em; /* Generous padding for maximum claustrophobia */
+  text-align: center; /* Centered for maximum unease */
+}
+
+/* Animations - a dance of digital demons */
+@keyframes pulsate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

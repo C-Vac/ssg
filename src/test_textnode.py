@@ -69,8 +69,8 @@ class TestTextNode(unittest.TestCase):
 
     def test_split_nodes_delimiter_unmatched_delimiter(self):
         nodes = [TextNode("This is *unmatched text", TextType.TEXT)]
-        with self.assertRaises(SyntaxError):
-            TextNode.split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+        result = TextNode.split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+        self.assertEqual(result, nodes)
 
     def test_split_nodes_delimiter_empty_input(self):
         result = TextNode.split_nodes_delimiter([], "*", TextType.ITALIC)

@@ -109,7 +109,7 @@ def block_to_html_node(block: str):
             new_item = item.split(".", 1)[1].strip()
             item_parts_nodes = text_to_children(new_item)
             line_nodes.append(ParentNode(tag="li", children=item_parts_nodes))
-        return ParentNode(tag="ul", children=line_nodes)
+        return ParentNode(tag="ol", children=line_nodes)
 
     match block_to_block_type(block):
         case "heading":
@@ -199,7 +199,7 @@ def block_to_block_type(block: str):
         return "code"
     if all(line.startswith(">") for line in lines):
         return "quote"
-    if all(line.startswith(("* ", "- ")) for line in lines):
+    if all(line.startswith(("* ", "- ", "+")) for line in lines):
         return "unordered_list"
     if all(line.startswith(str(i + 1) + ". ") for i, line in enumerate(lines)):
         return "ordered_list"

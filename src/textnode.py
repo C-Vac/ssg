@@ -110,17 +110,16 @@ class TextNode():
                         i += 1
                 parts.append(text)
 
-                if delimiter_count % 2 != 0:
-                    raise SyntaxError(f"Invalid Markdown syntax: unmatched delimiter '{delimiter}'")
-
-                text_parts = parts[::2]
-                code_parts = parts[1::2]
-                for text, code in zip(text_parts, code_parts + [""]):
-                    if text:
-                        new_nodes.append(TextNode(text, TextType.TEXT))
-                    if code:
-                        new_nodes.append(TextNode(code.replace(delimiter, "", 1), text_type))
-
+                if delimiter_count % 2 == 0:
+                    text_parts = parts[::2]
+                    code_parts = parts[1::2]
+                    for text, code in zip(text_parts, code_parts + [""]):
+                        if text:
+                            new_nodes.append(TextNode(text, TextType.TEXT))
+                        if code:
+                            new_nodes.append(TextNode(code.replace(delimiter, "", 1), text_type))
+                else:
+                    new_nodes.append(node)
             else:
                 new_nodes.append(node)
 
