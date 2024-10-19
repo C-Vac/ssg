@@ -10,6 +10,8 @@ def publish_static_content():
     public_root = "public"
     static_root = "static"
 
+    print(f"Publishing contents of '{static_root}' to '{public_root}'.")
+
     def copy_directory(static_dir):
         nonlocal public_root
         files_copied = 0
@@ -76,9 +78,9 @@ def publish_static_content():
     print("\n> Copying contents of '/static' to '/public'.")
     copy_directory(static_root)
 
-def generate_html_content(): # TODO: current objective
+def generate_html_content():
     """
-    Reads the contents of the 'content' directory, then creates directories and generates html files in 'static'.
+    Reads the contents of the 'content' directory, then creates directories and generates html files in 'static' for each markdown file found in each subdirectory and in the root of 'content'.
     """
     with os.scandir("content") as files:
         for dir_entry in files:
@@ -93,20 +95,26 @@ def generate_html_content(): # TODO: current objective
             # Process content file in subdir
             elif not dir_entry.is_file():
                 with os.scandir(dir_entry.path) as pages:
-                    if not len(pages) == 1:
+                    page_paths = []
+                    for entry in pages:
+                        page_paths.append(entry.path)
+                    if not len(page_paths) == 1:
                         print(f"!-- Must be exactly one file per subdirectory in 'content/': " + dir_entry.path)
                         break
-                    md_file = pages[0]
-                    if not md_file.path.endswith(".md"):
-                        print("!-- Content must be a '.md' file: " + dir_entry.path)
+                    md_file = page_paths[0]
+                    if not md_file.endswith(".md"):
+                        print("!-- Content must be a '.md' file: " + md_file)
                         break
 
-                    target_path = md_file.path
-                    relative_path = os.path.relpath(md_file.path, "content")
+                    target_path = md_file
+                    relative_path = os.path.relpath(md_file, "content")
                     # eg. "page_directory/page_content.md"
                     head, tail = os.path.split(relative_path)
                     # eg. ("page_directory/", "page_content.md")
-                    html_path = os.path.join("static/", head, tail.strip(".md") + ".html")
+                    
+                    # NOTE: RENAMES FILES TO index.html FOR NOW
+                    html_path = os.path.join("static/", head, "index.html")
+                    # html_path = os.path.join("static/", head, tail.strip(".md") + ".html")
                     # eg. "static/page_directory/page_content.html"
                     new_dir = os.path.dirname(html_path)
 
@@ -114,14 +122,16 @@ def generate_html_content(): # TODO: current objective
                     if not os.path.exists(new_dir):
                         os.mkdir(new_dir)
 
+            if target_path == "":
+                print("!! Something went wrong with getting the target path to convert a MD file to HTML.")
             html = generate_html_document(target_path)
 
             # Create new html file or overwrite the existing file
-            with open(html_path, "x") as html_file:
+            with open(html_path, "w") as html_file:
                 html_file.write(html)
 
 
-def generate_html_document(md_file): # TODO: fix this shit
+def generate_html_document(md_file):
     """
     Converts a Markdown file to an HTML document string.
 
@@ -132,31 +142,39 @@ def generate_html_document(md_file): # TODO: fix this shit
         html: String containing full HTML text.
     """
     try:
+        print(f"> Processing file: {md_file}")
         with open(md_file, "r") as f:
             md_text = f.read()
         html_node = markdown_to_html_node(md_text)
 
-        _, filename = os.path.split(md_file)
-        filename = filename.strip(".md")
+        head, tail = os.path.split(md_file)
+        filename = tail.strip(".md")
 
-        html_head = """
-<!doctype html>
-<head>
-    <base href="/goblin/">
-    <link rel="stylesheet" href="goblin.css">
-    <--- THIS SITE AND ITS CONTENTS ARE THE INTELLECTUAL PROPERTY OF GG OCDWARE, ALL RIGHTS RESERVED --->
-</head>
+        base_path = ""
+        if head == "content":
+            base_path = ""
+        else:
+            base_path = os.path.relpath(head, "content") + "/"
+        head_parts = [
+            "<!doctype html>",
+            "<head>",
+            f"<base href=\"/{base_path}\">",
+            f"<link rel=\"stylesheet\" href=\"{filename}.css\">",
+            "<!-- THIS SITE AND ITS CONTENTS ARE THE INTELLECTUAL PROPERTY OF GG OCDWARE, ALL RIGHTS RESERVED -->",
+            "</head>"
+        ]
+        html_head = ""
+        for part in head_parts:
+            html_head += part
 
-"""
         html_body = "<body>" + html_node.to_html() + "</body>"
         html = html_head + html_body
 
-        print(f"Successfully converted {md_file} to HTML.")
-
+        print(f"> Successfully converted {md_file} to HTML.")
         return html
 
     except Exception as e:
-        print(f"Error converting Markdown to HTML: {e}")
+        print(f"!-- Error converting Markdown to HTML: {e}")
 
 def markdown_to_html_node(markdown):
 
